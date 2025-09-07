@@ -5,11 +5,29 @@
   const saveIndicator = document.getElementById("save-indicator");
   const toolbar = document.getElementById("toolbar");
   const themeToggle = document.getElementById("theme-toggle");
+  const focusModeToggle = document.getElementById("focus-mode-toggle");
 
   let currentDocId = null;
   let isDirty = false;
+  let saveTimeout;
 
-  function setSaveStatus(text) { saveIndicator.textContent = text; }
+  function setFocusMode(enable) {
+    document.body.classList.toggle('focus-mode-active', enable);
+    focusModeToggle.classList.toggle('active', enable); // Add/remove active class
+    focusModeToggle.textContent = enable ? 'Exit Focus Mode' : 'Focus Mode'; // Dynamic text
+    storage.updateSettings({ focus_mode: enable });
+  }
+
+  function setSaveStatus(text, isError = false) {
+    saveIndicator.textContent = text;
+    saveIndicator.style.color = isError ? '#dc2626' : 'var(--muted)'; // Red for error, muted for others
+    if (saveTimeout) clearTimeout(saveTimeout);
+    if (!isError && text === 'Saved') {
+      saveTimeout = setTimeout(() => {
+        // Optionally fade out or hide after a delay if needed
+      }, 3000);
+    }
+  }
 
   function applyWordCount() {
     const text = editor.innerText || "";
@@ -38,16 +56,21 @@
       setSaveStatus("Saved");
       isDirty = false;
       docManager.renderDocumentList(); // Update document list on save
+    } else {
+      setSaveStatus("Error saving!", true);
     }
   }
 
   const debouncedAutoSave = utils.debounce(() => {
-    if (isDirty) saveDocument();
+    if (isDirty) {
+      setSaveStatus("Saving...");
+      saveDocument();
+    }
   }, storage.getSettings().auto_save_interval || 2000);
 
   editor.addEventListener("input", () => {
     isDirty = true;
-    setSaveStatus("Saving...");
+    setSaveStatus("Saving..."); // Show saving immediately on input
     applyWordCount();
     debouncedAutoSave();
   });
@@ -58,7 +81,7 @@
 
   titleInput.addEventListener("input", () => {
     isDirty = true;
-    setSaveStatus("Saving...");
+    setSaveStatus("Saving..."); // Show saving immediately on input
     debouncedAutoSave();
     docManager.renderDocumentList(); // Update document list on title input
   });
@@ -147,10 +170,22 @@
     storage.updateSettings({ theme: next });
   });
 
+  // Focus Mode toggle
+  focusModeToggle.addEventListener("click", () => {
+    const current = document.body.classList.contains('focus-mode-active');
+    setFocusMode(!current);
+  });
+
   // Apply theme from settings
   (function applyThemeFromSettings() {
     const s = storage.getSettings();
     document.body.setAttribute("data-theme", s.theme || "light");
+  })();
+
+  // Apply focus mode from settings
+  (function applyFocusModeFromSettings() {
+    const s = storage.getSettings();
+    setFocusMode(s.focus_mode || false);
   })();
 
   // Initialize
@@ -287,6 +322,7 @@
     loadDocument,
     saveDocument,
     getCurrentDocId: () => currentDocId, // Expose currentDocId
+    setFocusMode, // Expose setFocusMode
   };
 })();
 

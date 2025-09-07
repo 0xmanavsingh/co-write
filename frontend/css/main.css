@@ -25,6 +25,67 @@ body {
   grid-template-rows: auto auto 1fr auto;
 }
 
+/* Ensure app-header is always visible and on top in focus mode */
+.focus-mode-active .app-header {
+  position: fixed; /* Keep it fixed at the top */
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg); /* Ensure its background */
+  z-index: 1000; /* Extremely high z-index to be on top */
+  border-bottom: none; /* No border in focus mode */
+  justify-content: flex-end; /* Push items to the right */
+  padding: 12px 16px; /* Maintain padding */
+}
+
+.focus-mode-active .toolbar,
+.focus-mode-active .app-sidebar,
+.focus-mode-active .app-footer {
+  display: none !important; /* Hide other main layout elements with !important */
+}
+
+.focus-mode-active .app-header #toggle-sidebar,
+.focus-mode-active .app-header .doc-title,
+.focus-mode-active .app-header #menu-button {
+  display: none !important; /* Hide distracting header elements with !important */
+}
+
+/* Ensure the header right section is visible and handles its children */
+.focus-mode-active .header-right {
+  display: flex !important; /* Ensure flex behavior */
+  align-items: center;
+  gap: 8px; /* Maintain gap between items */
+  margin-left: auto; /* Push to the right */
+}
+
+/* Keep the save indicator and focus mode toggle visible */
+.focus-mode-active #save-indicator,
+.focus-mode-active #focus-mode-toggle {
+  display: block !important; /* Force visibility with !important */
+  opacity: 1 !important; /* Force full opacity */
+  white-space: nowrap; /* Prevent text wrapping */
+  width: auto; /* Allow button to size to content */
+}
+
+.focus-mode-active .app-layout {
+  display: block; /* Override flex for simpler layout in focus mode */
+}
+
+.focus-mode-active .main-content {
+  width: 100%;
+  padding-top: 0; /* Remove top padding */
+}
+
+.focus-mode-active .editor-container {
+  height: 100vh; /* Take full viewport height */
+  padding: 40px 16px; /* Adjust padding for focus mode */
+}
+
+.focus-mode-active .editor {
+  min-height: calc(100vh - 80px); /* Adjust min-height for full editor space */
+  margin: auto; /* Center the editor content block */
+}
+
 .app-layout {
   display: flex;
   flex: 1; /* Allows the main layout to grow */
@@ -204,6 +265,34 @@ body {
   color: var(--fg);
   border-radius: 8px;
   width: 36px; height: 36px;
+}
+
+/* Ensure the Focus Mode button (both active and inactive) displays text correctly */
+#focus-mode-toggle {
+  width: auto !important; /* Allow button to expand to text content */
+  min-width: 100px !important; /* Ensure minimum width to avoid wrapping for "Focus Mode" */
+  padding: 6px 10px !important; /* Adjust padding to match other text buttons */
+}
+
+.focus-mode-active #focus-mode-toggle {
+  margin: 0 !important; /* Remove any conflicting margins */
+}
+
+/* Reinforce header-right layout and ensure visibility of its children */
+.focus-mode-active .header-right {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-left: auto !important;
+}
+
+/* Ensure the save indicator is visible and not affected by any other rules */
+.focus-mode-active #save-indicator {
+  display: block !important; /* Force visibility */
+  opacity: 1 !important; /* Force full opacity */
+  white-space: nowrap !important; /* Prevent text wrapping */
+  width: auto !important; /* Allow it to size to its content */
+  margin: 0 !important; /* Remove any conflicting margins */
 }
 
 .toolbar {
