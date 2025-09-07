@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Co-Write</title>
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/editor.css" />
+    <link rel="stylesheet" href="./css/themes.css" />
+  </head>
+  <body data-theme="light">
+    <header class="app-header">
+      <button id="toggle-sidebar" class="icon-button" aria-label="Toggle document list" title="Documents">☰</button>
+      <input id="doc-title" class="doc-title" type="text" placeholder="Untitled document" aria-label="Document title" />
+      <div class="header-right">
+        <span id="save-indicator" class="save-indicator" aria-live="polite">Saved</span>
+        <button id="menu-button" class="icon-button" aria-label="Menu" title="Menu">⋯</button>
+      </div>
+    </header>
+
+    <div class="app-layout">
+      <aside id="sidebar" class="app-sidebar">
+        <div class="sidebar-header">
+          <h2>Documents</h2>
+          <button id="new-document-button" class="icon-button" aria-label="New document" title="New Document">+</button>
+        </div>
+        <div class="sidebar-controls">
+          <input type="text" id="document-search" placeholder="Search documents..." aria-label="Search documents">
+          <select id="document-sort" aria-label="Sort documents by">
+            <option value="updated_at">Last Modified</option>
+            <option value="title">Title</option>
+            <option value="word_count">Word Count</option>
+            <option value="created_at">Creation Date</option>
+          </select>
+        </div>
+        <div class="document-list" id="document-list"></div>
+      </aside>
+
+      <div class="main-content">
+        <nav id="toolbar" class="toolbar" aria-label="Formatting toolbar">
+      <button class="tool" data-cmd="bold" aria-label="Bold (Cmd/Ctrl+B)" title="Bold (Cmd/Ctrl+B)"><strong>B</strong></button>
+      <button class="tool" data-cmd="italic" aria-label="Italic (Cmd/Ctrl+I)" title="Italic (Cmd/Ctrl+I)"><em>I</em></button>
+      <button class="tool" data-cmd="underline" aria-label="Underline (Cmd/Ctrl+U)" title="Underline (Cmd/Ctrl+U)"><u>U</u></button>
+      <span class="divider"></span>
+      <button class="tool" data-block="h1" title="H1">H1</button>
+      <button class="tool" data-block="h2" title="H2">H2</button>
+      <button class="tool" data-block="h3" title="H3">H3</button>
+      <span class="divider"></span>
+      <button class="tool" data-list="ul" title="Bullet list">• List</button>
+      <button class="tool" data-list="ol" title="Numbered list">1. List</button>
+      <button class="tool" data-list="checkbox" title="Checkbox list">☐ List</button>
+      <span class="divider"></span>
+      <button class="tool" data-cmd="strikeThrough" title="Strikethrough">S</button>
+      <button class="tool" id="theme-toggle" title="Toggle theme">🌓</button>
+    </nav>
+
+    <main class="editor-container">
+      <section id="editor" class="editor" contenteditable="true" role="textbox" aria-multiline="true" spellcheck="true"></section>
+    </main>
+
+    <footer class="app-footer">
+      <div id="word-count" aria-live="polite">0 words</div>
+    </footer>
+      </div>
+    </div>
+
+    <script src="./js/utils.js" defer></script>
+    <script src="./js/storage.js" defer></script>
+    <script src="./js/document-manager.js" defer></script>
+    <script src="./js/editor.js" defer></script>
+    <script src="./js/main.js" defer></script>
+  </body>
+  </html>
+
+
